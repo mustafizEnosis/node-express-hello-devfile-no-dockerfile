@@ -9,13 +9,6 @@ pipeline {
     }
     
     stages {
-        stage('Checkout') {
-            steps {
-                deleteDir()
-                git credentialsId: 'DevOps_Repo_SSH', branch: "main", url: 'git@github.com:mustafizEnosis/node-express-hello-devfile-no-dockerfile.git'
-            }
-        }
-
         stage('Package') {
             steps {
                 script {
@@ -56,6 +49,9 @@ pipeline {
                     script {
                         echo "Pulling docker image from ${REGISTRY_URL}"
                         sh "docker pull ${REGISTRY_URL}/${IMAGE_NAME}:${COMMIT_SHA}"
+
+                        def container_id = sh(script: "docker ps --filter \"publish=3000\" --format \"{{.ID}}\"", returnStdout: true).trim()
+                        sh "docker stop ${container_id}"
                         
                         sh "docker run -d -p 3000:8080 ${REGISTRY_URL}/${IMAGE_NAME}:${COMMIT_SHA}"
                         
