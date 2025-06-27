@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-nodejs
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: nodejs-pod
+  template:
+    metadata:
+      labels:
+        name: nodejs-pod
+    spec:
+      containers:
+        - name: nodejs-container
+          image: localhost:5000/dev-ops-eval:latest
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
