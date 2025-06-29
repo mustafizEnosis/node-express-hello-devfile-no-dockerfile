@@ -19,8 +19,6 @@ spec:
     spec:
       containers:
         - name: nodejs-container
-          image: localhost:5000/dev-ops-eval:latest
+          image: mustafizur996/dev-ops-eval:latest
           ports:
             - containerPort: 8080
-      imagePullSecrets:
-        - name: regcred

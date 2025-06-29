@@ -62,10 +62,10 @@ pipeline {
                     script {
                         withEnv(["KUBECONFIG=${env.KUBECONFIG_PATH}"]) {
                             withCredentials([usernamePassword(credentialsId: 'DOCKER_REGISTRY_CRED', usernameVariable: 'REGISTRY_USER', passwordVariable: 'REGISTRY_PASS')]) {
-                                sh 'kubectl create secret docker-registry regcred --docker-server=${REGISTRY_URL} --docker-username=${REGISTRY_USER} -docker-password=${REGISTRY_PASS}'
+                                sh 'kubectl create secret docker-registry regcred --docker-server=${REGISTRY_URL} --docker-username=${REGISTRY_USER} --docker-password=${REGISTRY_PASS}'
                             }
 
-                            sh "kubectl apply -f k8s-manifests/Deployment.yaml"
+                            sh "kubectl apply -f k8s-manifests/"
                             sh "kubectl set image deployment/sample-nodejs nodejs-container=${REGISTRY_URL}/${IMAGE_NAME}:${COMMIT_SHA} --record"
 
                             sleep 3
