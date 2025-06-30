@@ -22,3 +22,5 @@ spec:
           image: mustafizur996/dev-ops-eval:latest
           ports:
             - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
