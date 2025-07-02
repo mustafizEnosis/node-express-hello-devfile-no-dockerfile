@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nodejs-container
-          image: mustafizur996/dev-ops-eval:1e93bd1
+          image: mustafizur996/dev-ops-eval:cbefe63
           ports:
             - containerPort: 8080
       imagePullSecrets: 
