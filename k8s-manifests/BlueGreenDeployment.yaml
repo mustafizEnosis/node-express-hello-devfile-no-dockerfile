@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout-canary
+spec:
+  replicas: 5 
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      name: nodejs-pod
+  template:
+    metadata:
+      labels:
+        name: nodejs-pod
+    spec:
+      containers:
+        - name: nodejs-container
+          image: mustafizur996/dev-ops-eval:1e93bd1
+          ports:
+            - containerPort: 8080
+      imagePullSecrets: 
+      - name: regcred
+  strategy:
+    blueGreen:
+      # These service names are crucial for Argo Rollouts to manage traffic
+      activeService: my-web-app-primary-service # The Service that will point to the CURRENT active version
+      previewService: my-web-app-preview-service # An optional Service to access the NEW green version before promotion
+      autoPromotionEnabled: false # Set to true for fully automated, or false for manual promotion
+      # You can add a `prePromotionAnalysis` or `postPromotionAnalysis` section here
+      # For example, to run health checks or integration tests before the switch
+      # prePromotionAnalysis:
+      #   templates:
+      #     - templateName: green-env-health-check
+      # postPromotionAnalysis:
+      #   templates:
+      #     - templateName: production-monitor-check

@@ -1,10 +1,24 @@
+# my-app/services.yaml (These are also managed by Argo CD)
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodejs-service
+  name: my-web-app-primary-service # This is the service that users will access
 spec:
   ports:
-  - nodePort: 30080
+  - nodePort: 30090
+    port: 8080
+    targetPort: 8080
+  selector:
+    name: nodejs-pod
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-web-app-preview-service # This service allows you to test the new green version
+spec:
+  ports:
+  - nodePort: 30095
     port: 8080
     targetPort: 8080
   selector:
