@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollout-canary
+spec:
+  replicas: 5 
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      name: nodejs-pod
+  template:
+    metadata:
+      labels:
+        name: nodejs-pod
+    spec:
+      containers:
+        - name: nodejs-container
+          image: mustafizur996/dev-ops-eval:cbefe63
+          ports:
+            - containerPort: 8080
+      imagePullSecrets: 
+      - name: regcred
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      # The following pause step will pause the rollout indefinitely until manually resumed.
+      # Rollouts can be manually resumed by running `kubectl argo rollouts promote ROLLOUT`
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 40s}
+      - setWeight: 60
+      - pause: {duration: 20s}
+      - setWeight: 80
+      - pause: {duration: 20s}
