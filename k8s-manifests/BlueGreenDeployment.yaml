@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: rollout-deployment
+  name: rollout-blue-green
 spec:
   replicas: 5 
   revisionHistoryLimit: 2
